@@ -1,0 +1,107 @@
+﻿@model IEnumerable<SalesBill>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Sales Bill</h3>
+    </div>
+    <div class="panel-body">
+
+        <table id="dataTableList" class="table table-striped table-bordered dt-responsive nowrap" style="width:100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>SalesBill Id</th>
+                    <th>PaymentMode</th>
+                    <th>Bill Date</th>
+                    <th>Lorry NO</th>
+                    <td></td>
+                    <td></td>
+                    <td></td>
+                    <td>Print</td>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var salesBill in Model)
+                {
+                    <tr id="@salesBill.SalesBillId">
+                        <td class="salesBillId">@salesBill.SalesBillId</td>
+                        <td>@salesBill.PaymentMode</td>
+                        <td>@salesBill.SalesBillDate.Value.ToString("dd/MM/yyyy")</td>
+                        <td>@salesBill.LorryNo</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@salesBill.SalesBillId" class="btn btn-primary">Edit</a>
+                        </td>
+                        <td>
+                            <form method="post" asp-action="Delete" asp-route-id="@salesBill.SalesBillId">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure want to delete?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                        <td>
+                            <a target="_blank" href='@Url.Action("Print", "SalesBill", new { id = salesBill.SalesBillId, PrintOptions = "Test" })' class="btn btn-info print">
+                                Print
+                            </a>
+                        </td>
+                        <td>
+                            <select id="PrintOptions" onchange="SetPrintOptionsValue(this)" class="selectpicker" multiple>
+                                <option>Consignor</option>
+                                <option>Consignee</option>
+                                <option>Transport</option>
+                                <option>Dispatch</option>
+                            </select>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @await Component.InvokeAsync("ListFooter")
+</div>
+
+@await Component.InvokeAsync("DataTableScripts")
+
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+
+        $(".selectpicker").selectpicker();
+
+    });
+
+    function SetPrintOptionsValue(row) {
+        var salesBillId = $(row).closest('tr').find('.salesBillId').html();
+        var printOptions = $(row).closest('tr').find('.selectpicker').val();
+
+        var url = "/SalesBill/Print/" + salesBillId+"?PrintOptions=" + printOptions;
+
+        $(row).closest('tr').find('.print').attr('href', url);
+
+    }
+
+    function Print(row) {
+
+        var salesBillId = $(row).closest('tr').find('.salesBillId').html();
+        var printOptions = $(row).closest('tr').find('.selectpicker').val();
+
+        $.ajax({
+
+            url: '@Url.Action("Print", "SalesBill")',
+            data: { id:salesBillId, PrintOptions:printOptions },
+            dataType: "json",
+            success: function (data, status) {
+                alert(data);
+             },
+             error: function () {
+                 alert('error');
+             }
+         });
+
+    }
+</script>

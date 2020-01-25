@@ -1,0 +1,8 @@
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.1\KarthikeyasakthiTransport.csprojAssemblyReference.cache
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.1\KarthikeyasakthiTransport.csproj.CoreCompileInputs.cache
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.1\KarthikeyasakthiTransport.RazorAssemblyInfo.cache
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.1\KarthikeyasakthiTransport.RazorAssemblyInfo.cs
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.1\KarthikeyasakthiTransport.AssemblyInfoInputs.cache
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.1\KarthikeyasakthiTransport.AssemblyInfo.cs
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.1\KarthikeyasakthiTransport.dll
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.1\KarthikeyasakthiTransport.pdb

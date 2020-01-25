@@ -1,0 +1,55 @@
+﻿@model IEnumerable<MenuMaster>
+<ul class="nav navbar-nav">
+    @foreach (var menu in Model.Where(m => m.ParentId == 0))
+    {
+        if (menu.SubMenu == 0)
+        {
+            <li><a href="#">@menu.MenuName</a></li>
+        }
+        if (menu.SubMenu == 1)
+        {
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@menu.MenuName <b class="caret"></b></a>
+                <ul class="dropdown-menu multi-level">
+                    @foreach (var subMenu in Model.Where(m => m.ParentId == menu.MenuId))
+                    {
+                        <li>
+                            @Html.ActionLink(@subMenu.MenuName, subMenu.ActionName, subMenu.ControllerName)
+                        </li>
+                    }
+                </ul>
+            </li>
+        }
+        if (menu.SubMenu == 2)
+        {
+            <li>
+                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@menu.MenuName<b class="caret"></b></a>
+                <ul class="dropdown-menu">
+                    @foreach (var secondSubMenu in Model.Where(m => m.ParentId == menu.MenuId))
+                    {
+                        if (secondSubMenu.SubMenu == 0)
+                        {
+                            <li>
+                                <a href="#">@secondSubMenu.MenuName</a>
+                            </li>
+                        }
+                        if (secondSubMenu.SubMenu == 1)
+                        {
+                            <li class="dropdown-submenu">
+                                <a href="#" class="dropdown-toggle" data-toggle="dropdown">@secondSubMenu.MenuName</a>
+                                <ul class="dropdown-menu">
+                                    @foreach (var subMenu in Model.Where(m => m.ParentId == secondSubMenu.MenuId))
+                                    {
+                                        <li>
+                                            <a href="#">@subMenu.MenuName</a>
+                                        </li>
+                                    }
+                                </ul>
+                            </li>
+                        }
+                    }
+                </ul>
+            </li>
+        }
+    }
+</ul>

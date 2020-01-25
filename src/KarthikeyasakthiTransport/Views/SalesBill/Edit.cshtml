@@ -1,0 +1,614 @@
+﻿@model SalesBill
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (TempData["SalesBillMessage"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["SalesBillMessage"]</p>
+}
+
+<style>
+    .form-group {
+    }
+
+    #SalesBillForm {
+        font-size: 14px !important;
+    }
+
+    #dataTableList thead tr td {
+        text-align: center !important;
+    }
+</style>
+<form method="post" enctype="multipart/form-data" asp-controller="SalesBill" id="SalesBillForm" asp-action="Edit">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Edit Sales Bill</h3>
+        </div>
+        <div class="panel-body">
+            <div class="row">
+                <div class=" col-md-2">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="SalesBillId">SalesBillId</label>
+                        <input id="SalesBillId" asp-for="SalesBillId" type="text" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="SalesBillId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" asp-for="InvoiceNo">Invoice No</label>
+                        <input id="InvoiceNo" asp-for="InvoiceNo" type="text" class="form-control" />
+                        <span asp-validation-for="InvoiceNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" asp-for="SalesBillDate">SalesBillDate</label>
+                        <input asp-for="SalesBillDate" type="text" id="SalesBillDate" class="form-control" />
+                        <span asp-validation-for="SalesBillDate" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="ConsignorId">ConsignorId</label>
+                        <select asp-for="ConsignorId" class="form-control selectpicker DropDownWidth" data-live-search="true" onchange="GetLedgerMasterDetails(this,'consignor')"
+                                asp-items="@(new SelectList(ViewBag.Customers, "LedgerMasterId", "LedgerMasterName"))">
+                            <option disabled selected>--- SELECT ---</option>
+                        </select>
+                        <span asp-validation-for="ConsignorId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">ConsignorAddress</label>
+                        <textarea id="consignorAddress" type="text" class="form-control" rows="1" readonly="readonly"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">ConsignorMobile</label>
+                        <input id="consignorMobile" type="text" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="ConsigneeId">ConsigneeId</label>
+                        <select asp-for="ConsigneeId" class="form-control selectpicker DropDownWidth" data-live-search="true" onchange="GetLedgerMasterDetails(this,'consignee')"
+                                asp-items="@(new SelectList(ViewBag.Customers, "LedgerMasterId", "LedgerMasterName"))">
+                            <option disabled selected>--- SELECT ---</option>
+                        </select>
+                        <span asp-validation-for="ConsigneeId" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">ConsigneeAddress</label>
+                        <textarea id="consigneeAddress" type="text" class="form-control" rows="1" readonly="readonly"></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label">ConsigneeMobile</label>
+                        <input id="consigneeMobile" type="text" class="form-control" readonly="readonly" />
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="Value">Value</label>
+                                <input asp-for="Value" type="text" class="form-control" />
+                                <span asp-validation-for="Value" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="ModeOfPay">ModeOfPay</label>
+                                <input asp-for="ModeOfPay" type="text" class="form-control" />
+                                <span asp-validation-for="ModeOfPay" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="form-group">
+                        <label class="control-label" asp-for="LRNo">LR No</label>
+                        <input asp-for="LRNo" type="text" class="form-control" />
+                        <span asp-validation-for="LRNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" asp-for="EWayBillNo">EWayBillNo</label>
+                        <input asp-for="EWayBillNo" type="text" class="form-control" />
+                        <span asp-validation-for="EWayBillNo" class="text-danger"></span>
+                    </div>
+                </div>
+                <div class="col-md-2">
+
+                    <div class="form-group">
+                        <label class="control-label" asp-for="LorryNo">LorryNo</label>
+                        <input asp-for="LorryNo" type="text" class="form-control" />
+                        <span asp-validation-for="LorryNo" class="text-danger"></span>
+                    </div>
+                    <div class="form-group">
+                        <label class="control-label" asp-for="DispatchThrough">DispatchThrough</label>
+                        <input asp-for="DispatchThrough" type="text" class="form-control" />
+                        <span asp-validation-for="DispatchThrough" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="PaymentMode">PaymentMode</label>
+                                <select asp-for="PaymentMode" data-live-search="true" class="form-control" id="PaymentMode">
+                                    <option value="Cash">Cash</option>
+                                    <option value="Credit">Credit</option>
+                                </select>
+
+                                <span asp-validation-for="PaymentMode" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="BillType">BillType</label>
+                                <select asp-for="BillType" data-live-search="true" class="form-control" id="BillType">
+                                    <option value="To Pay">To Pay</option>
+                                    <option value="Paid">Paid</option>
+                                    <option value="To Be Billed">To Be Billed</option>
+                                </select>
+
+                                <span asp-validation-for="BillType" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class="col-md-2">
+                    <div class="form-group">
+                        <label class="control-label" asp-for="DeliveryAt">DeliveryAt</label>
+                        <textarea asp-for="DeliveryAt" class="form-control" rows="5"></textarea>
+                        <span asp-validation-for="DeliveryAt" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+
+            <hr />
+
+            <div class="row">
+                <div class="col-md-8">
+                    <div class="row">
+                        <div class=" col-md-3">
+                            <div class="form-group">
+                                <label class="control-label">Item Name</label>
+                                <select class="form-control selectpicker DropDownWidth" id="ItemMasterId" data-live-search="true" onchange="GetItemMasterDetails(this)"
+                                        asp-items="@(new SelectList(ViewBag.ItemMaster, "ItemMasterId", "ItemMasterName"))">
+                                    <option disabled selected>--- SELECT ---</option>
+                                </select>
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-5">
+                            <div class="form-group">
+                                <label class="control-label">Desc</label>
+                                <input type="text" id="Description" class="form-control" style="max-width:inherit" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Qty</label>
+                                <input type="text" class="form-control" id="Qty" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">Weight</label>
+                                <input type="text" class="form-control" id="ItemWeight" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-1">
+                            <div class="form-group">
+                                <label class="control-label">LorryFreight</label>
+                                <input type="text" class="form-control" id="ItemAmount" />
+                                <span class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class=" col-md-1">
+                            <div class="form-group">
+                                <input type="button" style="margin-top:24px" class="btn btn-success" value="Add" onclick="CreateSalesBillItems()" />
+                            </div>
+                        </div>
+                    </div>
+                    <hr />
+                    <div class="row">
+                        <div class="col-md-12" style="height: 200px;position: relative;overflow: auto;">
+                            <table id="dataTableList" class="table table-striped table-bordered dt-responsive nowrap" style=" max-height: 150px;    margin-bottom: 10px;    overflow-y:scroll;    -webkit-overflow-scrolling: touch;" width="100%" cellspacing="0">
+                                <thead>
+                                    <tr>
+                                        <th style="width:5%">Id</th>
+                                        <th style="width:20%">Name</th>
+                                        <th style="width:40%">Description</th>
+                                        <th style="width:7%">Qty</th>
+                                        <th style="width:9%">Weight</th>
+                                        <th style="width:9%">LorryFreight</th>
+                                        <th style="width:5%">
+                                            @*<a>
+                                                    <img src="~/lib/images/edit.png" height="32" width="32" style="cursor:pointer" />
+                                                </a>*@
+                                        </th>
+                                        <th style="width:5%">
+                                            @*<a>
+                                                    <img src="~/lib/images/delete.png" height="32" width="32" style="cursor:pointer" />
+                                                </a>*@
+                                        </th>
+                                    </tr>
+                                </thead>
+                                <tbody id="salesItemsBody">
+                                    <tr>
+                                        <td colspan="8" style="text-align:center">
+                                            No items are added.
+                                        </td>
+                                    </tr>
+                                </tbody>
+                            </table>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="col-md-2">
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="TotalWeight">TotalWeight</label>
+                                <input asp-for="TotalWeight" type="text" class="form-control" readonly="readonly" />
+                                <span asp-validation-for="TotalWeight" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="TotalAmount">TotalAmount</label>
+                                <input asp-for="TotalAmount" type="text" class="form-control" readonly="readonly" />
+                                <span asp-validation-for="TotalAmount" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="DoorDeliveryCharge">Delivery Charge</label>
+                                <input asp-for="DoorDeliveryCharge" type="text" class="form-control" onkeyup="Calculations()" />
+                                <span asp-validation-for="DoorDeliveryCharge" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="AssableValue">AssableValue</label>
+                                <input asp-for="AssableValue" type="text" class="form-control" readonly="readonly" />
+                                <span asp-validation-for="AssableValue" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="GstPercentage">Gst %</label>
+                                <input asp-for="GstPercentage" type="text" class="form-control" onkeyup="CalculateGst()" />
+                                <span asp-validation-for="GstPercentage" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="GstAmount">GstAmount</label>
+                                <input asp-for="GstAmount" type="text" class="form-control" readonly="readonly" />
+                                <span asp-validation-for="GstAmount" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="LoadingExpenses">LoadingExpenses</label>
+                                <input asp-for="LoadingExpenses" type="text" class="form-control" onkeyup="Calculations()" />
+                                <span asp-validation-for="LoadingExpenses" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="RoundOff">RoundOff</label>
+                                <input asp-for="RoundOff" type="text" class="form-control" onkeyup="Calculations()" />
+                                <span asp-validation-for="RoundOff" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+                <div class=" col-md-2">
+
+                    <div class="form-group">
+                        <label class="control-label" asp-for="GrandTotal">GrandTotal</label>
+                        <input asp-for="GrandTotal" type="text" class="form-control" readonly="readonly" />
+                        <span asp-validation-for="GrandTotal" class="text-danger"></span>
+                    </div>
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="PreviousBalance">PreviousBalance</label>
+                                <input asp-for="PreviousBalance" type="text" class="form-control" readonly="readonly" />
+                                <span asp-validation-for="PreviousBalance" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="CurrentBalance">CurrentBalance</label>
+                                <input asp-for="CurrentBalance" type="text" class="form-control" readonly="readonly" />
+                                <span asp-validation-for="CurrentBalance" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+
+                    <div class="row">
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="AdvanceAmount">AdvanceAmount</label>
+                                <input asp-for="AdvanceAmount" type="text" class="form-control" onkeyup="Calculations()" />
+                                <span asp-validation-for="AdvanceAmount" class="text-danger"></span>
+                            </div>
+                        </div>
+                        <div class="col-md-6">
+                            <div class="form-group">
+                                <label class="control-label" asp-for="BalanceAmount">BalanceAmount</label>
+                                <input asp-for="BalanceAmount" type="text" class="form-control" readonly="readonly" />
+                                <span asp-validation-for="BalanceAmount" class="text-danger"></span>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            @await Component.InvokeAsync("DivElement")
+        </div>
+    </div>
+</form>
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/css/bootstrap-select.min.css">
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap-select@1.13.9/dist/js/bootstrap-select.min.js"></script>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#containerDiv").removeClass('container')
+        $(".selectpicker").selectpicker();
+        $('#SalesBillDate').datepicker({
+            dateFormat: "dd/mm/yy"
+        });
+
+        CreateSalesBillItems();
+
+    });
+
+    function GetLedgerMasterDetails(id,type) {
+        var url = '@Url.Content("~/")' + "SalesBill/GetLedgerMasterDetails/" + id.value;
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            cache: false,
+            dataType: 'json',
+            success: function (result) {
+
+                if (type == 'consignor') {
+                    $("#consignorAddress").val(result.LedgerMasterData.Address);
+                    $("#consignorMobile").val(result.LedgerMasterData.MobileNumber);
+
+                    $("#PreviousBalance").val(result.PreviousBalance)
+                }
+                else {
+                    $("#consigneeAddress").val(result.LedgerMasterData.Address);
+                    $("#consigneeMobile").val(result.LedgerMasterData.MobileNumber);
+                }
+            },
+            error: function (textStatus, errorThrown) {
+                console.log('some error occured', textStatus, errorThrown);
+            }
+        });
+    }
+
+    function GetItemMasterDetails(id) {
+        var url = '@Url.Content("~/")' + "SalesBill/GetItemMasterDetails/" + id.value;
+
+        $.ajax({
+            url: url,
+            type: 'GET',
+            cache: false,
+            dataType: 'json',
+            success: function (result) {
+                $("#Description").val(result.ItemMasterDescription);
+            },
+            error: function (textStatus, errorThrown) {
+                console.log('some error occured', textStatus, errorThrown);
+            }
+        });
+    }
+
+    function CreateSalesBillItems() {
+        var SalesBillId = $("#SalesBillId").val();
+        var ItemMasterId = $("#ItemMasterId").val();
+        var Description = $("#Description").val();
+        var Qty = $("#Qty").val();
+        var ItemWeight = $("#ItemWeight").val();
+        var ItemAmount = $("#ItemAmount").val();
+
+        var salesBillItems = {
+            SalesBillId: SalesBillId,
+            ItemMasterId: ItemMasterId,
+            Description: Description,
+            Qty: Qty,
+            Weight: ItemWeight,
+            Amount: ItemAmount
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("CreateSalesBillItems", "SalesBill")',
+            data: salesBillItems,
+            dataType: "json",
+            success: function (data, status) {
+
+                $("#salesItemsBody").html("");
+                $.each(data.BillItems, function (id, billItems) {
+
+                    var html = "<tr id=" + billItems.SalesBillItemsId + ">"
+                    html += "<td class='salesItemId'>" + billItems.SalesBillItemsId + "</td>"
+                    html += "<td>" + billItems.ItemMasterName + "</td>"
+                    html += "<td>" + billItems.Description + "</td>"
+                    html += "<td class='salesItemQty'>" + billItems.Qty + "</td>"
+                    html += "<td class='salesItemWeight'>" + billItems.Weight + "</td>"
+                    html += "<td class='salesItemAmount'>" + billItems.Amount + "</td>"
+                    //html += "<td><a class='btn btn-primary' onclick='EditSalesItem(this)'>Edit</a></td>"
+                    html += "<td><button  style='display:none' type='button' class='btn btn-success salesItemUpdate' onclick='UpdateSalesItem(this)'><span class='glyphicon glyphicon-ok'></span></button><button type='button' class='btn btn-info salesItemEdit' onclick='EditSalesItem(this)'><span class='glyphicon glyphicon-edit'></span></button></td>"
+                    html += "<td><button type='button' class='btn btn-danger' onclick='DeleteSalesItem(this)'><span class='glyphicon glyphicon-remove'></span></button></td>"
+
+                    html += "</tr>";
+
+                    $("#salesItemsBody").append(html);
+                });
+
+                $("#TotalWeight").val(data.Totals.TotalWeight)
+                $("#TotalAmount").val(data.Totals.TotalAmount)
+
+                $("#ItemMasterId").val("--- SELECT ---");
+                $("#Description").val("");
+                $("#Qty").val("");
+                $("#ItemWeight").val("");
+                $("#ItemAmount").val("");
+
+                Calculations();
+            },
+            error: function() {
+                alert('error');
+            }
+        });
+    }
+
+    function EditSalesItem(row) {
+        var salesItemQty = $(row).closest('tr').find('.salesItemQty').html();
+        var textsalesItemQty = "<input type='text' class='form-control textsalesItemQty' value='" + salesItemQty + "' />"
+        $(row).closest('tr').find('.salesItemQty').html(textsalesItemQty);
+
+        var salesItemWeight = $(row).closest('tr').find('.salesItemWeight').html();
+        var textsalesItemQty = "<input type='text' class='form-control textsalesItemWeight' value='" + salesItemWeight + "' />"
+        $(row).closest('tr').find('.salesItemWeight').html(textsalesItemQty);
+
+        var salesItemAmount = $(row).closest('tr').find('.salesItemAmount').html();
+        var textsalesItemAmount = "<input type='text' class='form-control textsalesItemAmount' value='" + salesItemAmount + "' />"
+        $(row).closest('tr').find('.salesItemAmount').html(textsalesItemAmount);
+
+        $(row).closest('tr').find('.salesItemUpdate').show();
+        $(row).closest('tr').find('.salesItemEdit').hide();
+    }
+
+    function UpdateSalesItem(row) {
+
+        var salesItemId = $(row).closest('tr').find('.salesItemId').html();
+        var salesItemQty = $(row).closest('tr').find('.textsalesItemQty').val();
+        var salesItemWeight = $(row).closest('tr').find('.textsalesItemWeight').val();
+        var salesItemAmount = $(row).closest('tr').find('.textsalesItemAmount').val();
+
+        var salesBillItems = {
+            SalesBillItemsId: salesItemId,
+            Qty: salesItemQty,
+            Weight: salesItemWeight,
+            Amount: salesItemAmount
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("UpdateBillItems", "SalesBill")',
+            data: salesBillItems,
+            dataType: "json",
+            success: function (data) {
+
+                CreateSalesBillItems();
+            },
+            error: function() {
+                alert('error');
+            }
+        });
+
+    }
+
+    function DeleteSalesItem(row) {
+
+        var salesItemId = $(row).closest('tr').find('.salesItemId').html();
+
+        var salesBillItems = {
+            SalesBillItemsId: salesItemId
+        };
+
+        $.ajax({
+            type: "POST",
+            url: '@Url.Action("DeleteBillItems", "SalesBill")',
+            data: salesBillItems,
+            dataType: "json",
+            success: function (data) {
+
+                CreateSalesBillItems();
+            },
+            error: function() {
+                alert('error');
+            }
+        });
+
+    }
+
+    function Calculations() {
+
+        var TotalAmount = $("#TotalAmount").val();
+        TotalAmount = IsNullorEmpty(TotalAmount);
+
+        var DoorDeliveryCharge = $("#DoorDeliveryCharge").val();
+        DoorDeliveryCharge = IsNullorEmpty(DoorDeliveryCharge);
+
+        var GstAmount = $("#GstAmount").val();
+        GstAmount = IsNullorEmpty(GstAmount);
+
+        var LoadingExpenses = $("#LoadingExpenses").val();
+        LoadingExpenses = IsNullorEmpty(LoadingExpenses);
+
+        var RoundOff = $("#RoundOff").val();
+        RoundOff = IsNullorEmpty(RoundOff);
+
+        var AssableValueTotal = parseFloat(TotalAmount) + parseFloat(DoorDeliveryCharge);
+
+        $("#AssableValue").val(AssableValueTotal);
+
+        var GrandTotalValue = AssableValueTotal + parseFloat(GstAmount) + parseFloat(LoadingExpenses) + parseFloat(RoundOff);
+
+        $("#GrandTotal").val(GrandTotalValue);
+        $("#CurrentBalance").val(GrandTotalValue);
+
+        var PreviousBalance = $("#PreviousBalance").val();
+        PreviousBalance = IsNullorEmpty(PreviousBalance);
+
+        var AdvanceAmount = $("#AdvanceAmount").val();
+        AdvanceAmount = IsNullorEmpty(AdvanceAmount);
+
+        BalanceAmountValue = parseFloat(PreviousBalance) + parseFloat(GrandTotalValue) - parseFloat(AdvanceAmount);
+
+        $("#BalanceAmount").val(BalanceAmountValue);
+
+    }
+
+    function IsNullorEmpty(value) {
+        if (value === "") {
+            return 0;
+        }
+
+        return value;
+    }
+
+    function CalculateGst() {
+        var AssableValue = $("#AssableValue").val();
+        AssableValue = IsNullorEmpty(AssableValue);
+
+        var GstPercentage = $("#GstPercentage").val();
+        GstPercentage = IsNullorEmpty(GstPercentage);
+
+        var GstAmount = (parseFloat(AssableValue) * parseFloat(GstPercentage)) / 100;
+
+        GstAmount = IsNullorEmpty(GstAmount);
+
+        GstAmount = GstAmount.toFixed(2);
+
+        $("#GstAmount").val(GstAmount);
+
+        Calculations();
+    }
+</script>

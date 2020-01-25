@@ -1,0 +1,464 @@
+﻿@model ItemMasterViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (TempData["ItemMasterMessage"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["ItemMasterMessage"]</p>
+}
+<form method="post" enctype="multipart/form-data" asp-controller="ItemMaster" asp-action="Create">
+    @Html.AntiForgeryToken()
+    @Html.ValidationSummary()
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Create Item Master</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-offset-1 col-md-2">
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.CategoryId">Category Name</label>
+                    <input id="categoryName" asp-for="CategoryName" autofocus="autofocus" type="text" class="form-control" />
+                    <input asp-for="ItemMaster.CategoryId" value="" style="display:none" id="categoryId" type="text" class="form-control" />
+                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.BarCode">BarCode</label>
+                    <input asp-for="ItemMaster.BarCode" type="text" class="form-control" />
+                    <span asp-validation-for="ItemMaster.BarCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.ItemMasterName">ItemMasterName</label>
+                    <input asp-for="ItemMaster.ItemMasterName" type="text" class="form-control" />
+                    <span asp-validation-for="ItemMaster.ItemMasterName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.ItemMasterDescription">ItemMasterDescription</label>
+                    <textarea asp-for="ItemMaster.ItemMasterDescription" class="form-control" rows="5"></textarea>
+                    <span asp-validation-for="ItemMaster.ItemMasterDescription" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.ItemMasterNameTamil">ItemMasterNameTamil</label>
+                    <input asp-for="ItemMaster.ItemMasterNameTamil" type="text" class="form-control" />
+                    <span asp-validation-for="ItemMaster.ItemMasterNameTamil" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.Case">Case</label>
+                    <input asp-for="ItemMaster.Case" type="text" value="1" class="form-control" readonly="readonly" />
+                    <span asp-validation-for="ItemMaster.Case" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-2">
+
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.Quantity">Quantity</label>
+                    <input asp-for="ItemMaster.Quantity" type="number" value="" class="form-control" />
+                    <span asp-validation-for="ItemMaster.Quantity" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.HsnCode">HsnCode</label>
+                    <input asp-for="ItemMaster.HsnCode" type="text" class="form-control" />
+                    <span asp-validation-for="ItemMaster.HsnCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.UnitId">Unit Name</label>
+                    <input id="unitName" type="text" class="form-control" />
+                    <input asp-for="ItemMaster.UnitId" style="display:none" id="unitId" type="text" class="form-control" />
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.MaximumRetailPrice">MRP</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.MaximumRetailPrice" type="number" step=".01" min="0" onkeyup="CalculateMarkDownMarkUp();" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.MaximumRetailPrice" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.BasicRate">BasicRate</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.BasicRate" type="text" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.BasicRate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.SaleRate">SaleRate</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.SaleRate" type="text" onkeyup="CalculateMarkDownMarkUp();" onblur="StoreSaleRateTemp()" class="form-control" />
+                        <input id="SaleRateTemp" type="hidden" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.SaleRate" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.WholeSaleRate">WholeSaleRate</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.WholeSaleRate" type="text" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.WholeSaleRate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.PurchaseRate">PurchaseRate</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.PurchaseRate" type="text" onkeyup="CalculateMarkDownMarkUp();" class="form-control" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.PurchaseRate" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.GSTInclude">GST Include</label>
+                    <input type="checkbox" class="form-control" asp-for="ItemMaster.GSTInclude" onchange="IncludeGST()" />
+                    <span asp-validation-for="ItemMaster.GSTInclude" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.TaxPercentage">Tax%</label>
+                    <div class="input-group">
+                        <input asp-for="ItemMaster.TaxPercentage" onkeyup="CalculateTax()" type="text" class="form-control" />
+                        <span class="input-group-addon">%</span>
+                    </div>
+                    <span asp-validation-for="ItemMaster.TaxPercentage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.TaxAmount">Tax₹</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.TaxAmount" type="text" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.TaxAmount" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="BeforeTaxDiv" style="display:none">
+                    <label class="control-label" asp-for="ItemMaster.BeforeTax">BeforeTax</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.BeforeTax" type="text" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.BeforeTax" class="text-danger"></span>
+                </div>
+                <div class="form-group" id="AfterTaxDiv" style="display:none">
+                    <label class="control-label" asp-for="ItemMaster.AfterTax">AfterTax</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.AfterTax" type="text" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.AfterTax" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.MarkDownPercentage">MarkDown%</label>
+                    <div class="input-group">
+                        <input asp-for="ItemMaster.MarkDownPercentage" type="text" class="form-control" readonly="readonly" />
+                        <span class="input-group-addon">%</span>
+                    </div>
+                    <span asp-validation-for="ItemMaster.MarkDownPercentage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.MarkDownAmount">MarkDown₹</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.MarkDownAmount" type="text" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.MarkDownAmount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.MarkUpPercentage">MarkUp%</label>
+                    <div class="input-group">
+
+                        <input asp-for="ItemMaster.MarkUpPercentage" type="text" class="form-control" readonly="readonly" />
+                        <span class="input-group-addon">%</span>
+                    </div>
+                    <span asp-validation-for="ItemMaster.MarkUpPercentage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.MarkUpAmount">MarkUp₹</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.MarkUpAmount" type="text" class="form-control" readonly="readonly" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.MarkUpAmount" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.DiscountPercentage">Discount%</label>
+                    <div class="input-group">
+
+                        <input asp-for="ItemMaster.DiscountPercentage" type="text" class="form-control" onkeyup="CalculateDiscount()" />
+                        <span class="input-group-addon">%</span>
+                    </div>
+                    <span asp-validation-for="ItemMaster.DiscountPercentage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.DiscountAmount">Discount₹</label>
+                    <div class="input-group">
+                        <span class="input-group-addon">₹</span>
+                        <input asp-for="ItemMaster.DiscountAmount" type="text" class="form-control" onkeyup="CalculateDiscount()" />
+                    </div>
+                    <span asp-validation-for="ItemMaster.DiscountAmount" class="text-danger"></span>
+                </div>
+            </div>
+            <div class="col-md-2">
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.CessPercentage">Cess%</label>
+                    <input asp-for="ItemMaster.CessPercentage" type="text" class="form-control" />
+                    <span asp-validation-for="ItemMaster.CessPercentage" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.AdditionalCess">AdditionalCess</label>
+                    <input asp-for="ItemMaster.AdditionalCess" type="text" class="form-control" />
+                    <span asp-validation-for="ItemMaster.AdditionalCess" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.ReorderLevel">ReorderLevel</label>
+                    <input asp-for="ItemMaster.ReorderLevel" type="number" class="form-control" />
+                    <span asp-validation-for="ItemMaster.ReorderLevel" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.OpeningStock">OpeningStock</label>
+                    <input asp-for="ItemMaster.OpeningStock" type="text" class="form-control" />
+                    <span asp-validation-for="ItemMaster.OpeningStock" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.CurrentStock">CurrentStock</label>
+                    <input asp-for="ItemMaster.CurrentStock" type="text" class="form-control" />
+                    <span asp-validation-for="ItemMaster.CurrentStock" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemMaster.StockMaintenance">StockMaintenance</label>
+                    <input asp-for="ItemMaster.StockMaintenance" type="checkbox" class="form-control" />
+                    <span asp-validation-for="ItemMaster.StockMaintenance" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        @await Component.InvokeAsync("DivElement")
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#containerDiv").removeClass('container')
+    });
+
+    $(document).ready(function () {
+        $('#categoryName').autocomplete({
+            source: function (request, response) {
+                var autocompleteUrl = '/Category/GetCategories' + '?search=' + request.term;
+                $.ajax({
+                    url: autocompleteUrl,
+                    type: 'GET',
+                    cache: false,
+                    dataType: 'json',
+                    success: function (json) {
+                        var groupData = JSON.stringify(json.responseText);
+                        var parse = JSON.parse(groupData);
+                        response($.map(parse, function (data) {
+                            return {
+                                label: data.value,
+                                value: data.value,
+                                id: data.id
+                            };
+                        }));
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log('some error occured', textStatus, errorThrown);
+                    }
+                });
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $('#categoryName').val(ui.item.value);
+                $('#categoryId').val(ui.item.id);
+                return false;
+            }
+        });
+
+        $('#unitName').autocomplete({
+            source: function (request, response) {
+                var autocompleteUrl = '/Unit/GetUnits' + '?search=' + request.term;
+                $.ajax({
+                    url: autocompleteUrl,
+                    type: 'GET',
+                    cache: false,
+                    dataType: 'json',
+                    success: function (json) {
+                        var groupData = JSON.stringify(json.responseText);
+                        var parse = JSON.parse(groupData);
+                        response($.map(parse, function (data) {
+                            return {
+                                label: data.value,
+                                value: data.value,
+                                id: data.id
+                            };
+                        }));
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log('some error occured', textStatus, errorThrown);
+                    }
+                });
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $('#unitName').val(ui.item.value);
+                $('#unitId').val(ui.item.id);
+                return false;
+            }
+        });
+
+        ShowHideBeforeAfterTax();
+    });
+
+    function CalculateMarkDownMarkUp() {
+        var MaximumRetailPrice = $("#ItemMaster_MaximumRetailPrice").val();
+        var SaleRate = $("#ItemMaster_SaleRate").val();
+        var PurchaseRate = $("#ItemMaster_PurchaseRate").val();
+
+        var MarkDownPercentage = ((SaleRate / MaximumRetailPrice) * 100 - 100).toFixed(2);
+        if (isNaN(MarkDownPercentage) || MarkDownPercentage == "Infinity") {
+            MarkDownPercentage = 0;
+        }
+
+        var MarkDownAmount = MaximumRetailPrice - SaleRate;
+        if (isNaN(MarkDownAmount) || MarkDownAmount == "Infinity") {
+            MarkDownAmount = 0;
+        }
+        MarkDownPercentage = parseFloat(MarkDownPercentage).toFixed(2);
+        MarkDownAmount = parseFloat(MarkDownAmount).toFixed(2);
+        $("#ItemMaster_MarkDownPercentage").val(MarkDownPercentage);
+        $("#ItemMaster_MarkDownAmount").val(MarkDownAmount);
+
+        var MarkUpPercentage = ((SaleRate / PurchaseRate) * 100 - 100).toFixed(2);
+        if (isNaN(MarkUpPercentage) || MarkUpPercentage == "Infinity") {
+            MarkUpPercentage = 0;
+        }
+
+        var MarkUpAmount = SaleRate - PurchaseRate;
+        if (isNaN(MarkUpAmount) || MarkUpAmount == "Infinity") {
+            MarkUpAmount = 0;
+        }
+
+        MarkUpPercentage = parseFloat(MarkUpPercentage).toFixed(2);
+        MarkUpAmount = parseFloat(MarkUpAmount).toFixed(2);
+        $("#ItemMaster_MarkUpPercentage").val(MarkUpPercentage);
+        $("#ItemMaster_MarkUpAmount").val(MarkUpAmount);
+    }
+
+    function IncludeGST() {
+        ShowHideBeforeAfterTax();
+        CalculateTax();
+    }
+
+    function ShowHideBeforeAfterTax() {
+        var GSTInclude = $('#ItemMaster_GSTInclude').is(":checked");
+        if (GSTInclude) {
+            $("#BeforeTaxDiv").show();
+            $("#AfterTaxDiv").hide();
+        } else {
+            $("#AfterTaxDiv").show();
+            $("#BeforeTaxDiv").hide();
+        }
+    }
+
+    function CalculateTax() {
+        var GSTInclude = $('#ItemMaster_GSTInclude').is(":checked");
+        var SaleRate = $("#ItemMaster_SaleRate").val();
+        var TaxPercentage = $("#ItemMaster_TaxPercentage").val();
+
+        if (GSTInclude) {
+            var SaleRateWithPercentage = parseFloat(100) + parseFloat(TaxPercentage);
+            if (isNaN(SaleRateWithPercentage) || SaleRateWithPercentage == "Infinity") {
+                SaleRateWithPercentage = 0;
+            }
+
+            var BeforeTaxAmount = (SaleRate - (SaleRate * (100 / SaleRateWithPercentage))).toFixed(2);
+            if (isNaN(BeforeTaxAmount) || BeforeTaxAmount == "Infinity" || BeforeTaxAmount == "-Infinity") {
+                BeforeTaxAmount = 0;
+                BeforeTaxAmount = BeforeTaxAmount.toFixed(2);
+            }
+
+            var Before = SaleRate - BeforeTaxAmount;
+            if (isNaN(Before) || Before == "Infinity") {
+                Before = 0;
+            }
+            Before = Before.toFixed(2);
+
+            $("#ItemMaster_TaxAmount").val(BeforeTaxAmount);
+            $("#ItemMaster_BeforeTax").val(Before);
+        }
+        else {
+            var AfterTaxAmount = ((TaxPercentage * SaleRate) / 100).toFixed(2);
+            if (isNaN(AfterTaxAmount) || AfterTaxAmount == "Infinity") {
+                AfterTaxAmount = 0;
+                AfterTaxAmount = AfterTaxAmount.toFixed(2);
+            }
+
+            var AfterTax = parseFloat(SaleRate) + parseFloat(AfterTaxAmount);
+            if (isNaN(AfterTax) || AfterTax == "Infinity") {
+                AfterTax = 0;
+            }
+            AfterTax = AfterTax.toFixed(2);
+
+            $("#ItemMaster_TaxAmount").val(AfterTaxAmount);
+            $("#ItemMaster_AfterTax").val(AfterTax);
+        }
+    }
+
+    function StoreSaleRateTemp() {
+        var SaleRate = $("#ItemMaster_SaleRate").val();
+        $("#ItemMaster_SaleRateTemp").val(SaleRate);
+    }
+
+    function CalculateDiscount() {
+
+        var SaleRate = $("#ItemMaster_SaleRateTemp").val();
+
+        var DiscountPercentage = $("#ItemMaster_DiscountPercentage").val();
+        var DiscountAmount = $("#ItemMaster_DiscountAmount").val();
+        if (DiscountPercentage != "" && !$('#ItemMaster_DiscountPercentage').is('[readonly]')) {
+            $("#ItemMaster_SaleRate").prop("readonly", true);
+            $("#ItemMaster_DiscountAmount").prop("readonly", true);
+
+            var DiscountAmount = (DiscountPercentage * SaleRate) / 100;
+
+            var DiscountSaleRate = SaleRate - DiscountAmount;
+
+            $("#ItemMaster_DiscountAmount").val(DiscountAmount);
+            $("#ItemMaster_SaleRate").val(DiscountSaleRate);
+        }
+        else if (DiscountPercentage == "" && $('#ItemMaster_DiscountAmount').is('[readonly]')) {
+            $("#ItemMaster_DiscountAmount").prop("readonly", false);
+            $("#ItemMaster_SaleRate").prop("readonly", false);
+            $("#ItemMaster_DiscountAmount").val("");
+            $("#ItemMaster_SaleRate").val(SaleRate);
+        }
+        else if (DiscountAmount != "" && !$('#ItemMaster_DiscountAmount').is('[readonly]')) {
+
+            if (DiscountAmount != "") {
+                $("#ItemMaster_SaleRate").prop("readonly", true);
+                $("#ItemMaster_DiscountPercentage").prop("readonly", true);
+
+                var DiscountPercentage = (DiscountAmount / SaleRate) * 100;
+
+                var DiscountSaleRate = SaleRate - DiscountAmount;
+
+                DiscountPercentage = DiscountPercentage.toFixed(2);
+                $("#ItemMaster_DiscountPercentage").val(DiscountPercentage);
+                $("#ItemMaster_SaleRate").val(DiscountSaleRate);
+            } else {
+                $("#ItemMaster_SaleRate").val(SaleRate);
+                $("#ItemMaster_DiscountAmount").val("");
+            }
+        }
+        else if (DiscountAmount == "" && $('#ItemMaster_DiscountPercentage').is('[readonly]')) {
+            $("#ItemMaster_DiscountPercentage").prop("readonly", false);
+            $("#ItemMaster_SaleRate").prop("readonly", false);
+            $("#ItemMaster_DiscountPercentage").val("");
+            $("#ItemMaster_SaleRate").val(SaleRate);
+        }
+
+        CalculateTax();
+        CalculateMarkDownMarkUp();
+
+    }
+</script>

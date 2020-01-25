@@ -1,0 +1,46 @@
+﻿@model Settings
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (TempData["SettingsMessage"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["SettingsMessage"]</p>
+}
+<form method="post" enctype="multipart/form-data" asp-controller="Settings" asp-action="Index">
+    <div class="panel panel-primary">
+
+        <div class="panel-heading">
+            <h3 class="panel-title">Settings</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-offset-0 col-md-4">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    <label class="control-label" asp-for="CustomBarCode">Custom BarCode Name</label>
+                    <input asp-for="CustomBarCode" type="text" autofocus="autofocus" class="form-control" />
+                    <span asp-validation-for="CustomBarCode" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="BarCodeStartFrom">BarCode Starts From Name</label>
+                    <input asp-for="BarCodeStartFrom" type="text" class="form-control" />
+                    <span asp-validation-for="BarCodeStartFrom" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="GSTInclude">GST Include</label>
+                    <input asp-for="GSTInclude" type="checkbox" class="form-control" />
+                    <span asp-validation-for="GSTInclude" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="ItemSettings">Item Settings</label>
+                    <input asp-for="ItemSettings" type="checkbox" class="form-control" />
+                    <span asp-validation-for="ItemSettings" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        <div class="panel-footer">
+            <input id="Submit" type="submit" class="btn btn-success" value="Update" />
+        </div>
+    </div>
+</form> 
