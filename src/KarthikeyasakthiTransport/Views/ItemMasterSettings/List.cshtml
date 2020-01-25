@@ -1,0 +1,260 @@
+﻿@model IEnumerable<LedgerItemMaster>
+
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<style>
+
+    /*.my-custom-scrollbar {
+        position: relative;
+        height: 200px;
+        overflow: auto;
+    }
+
+    .table-wrapper-scroll-y {
+        display: block;
+    }*/
+
+    #dataLedgerItemMaster td {
+        padding: 2px;
+    }
+
+    #dataItemMasterSettings td {
+        padding: 2px;
+    }
+
+    table.dataTable.nowrap td {
+        white-space: inherit !important;
+    }
+</style>
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">Item Master Settings</h3>
+    </div>
+    <div class="panel-body">
+        <div class="col-md-2">
+            <div class="list-group" style=" max-height: 650px;    margin-bottom: 10px;    overflow-y:scroll;    -webkit-overflow-scrolling: touch;">
+                @foreach (var ledgerMaster in ViewBag.LedgerMaster as IQueryable<LedgerMaster>)
+                {
+                    <a asp-controller="ItemMasterSettings" asp-action="List" asp-route-id="@ledgerMaster.SubGroupId" class="list-group-item list-group-item-action">@ledgerMaster.LedgerMasterName</a>
+                }
+            </div>
+        </div>
+        <div class="col-md-5">
+
+            <table id="dataItemMasterSettings" class="table table-striped table-bordered dt-responsive nowrap table-wrapper-scroll-y my-custom-scrollbar" style="font-size:14px;" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Barcode</th>
+                        <th>Item <br />Name</th>
+                        <th>Category<br /> Name   </th>
+                        <th>Purchase <br /> Rate</th>
+                        <th>MRP</th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var itemMaster in @Model)
+                    {
+                        <tr>
+                            <td>@itemMaster.BarCode</td>
+                            <td>@itemMaster.ItemMasterName</td>
+                            <td>@itemMaster.CategoryName</td>
+                            <td>
+                                <input type="text" class="purchaseRateData form-control" value="@itemMaster.PurchaseRate" />
+                            </td>
+                            <td>
+                                <input type="text" value="@itemMaster.MaximumRetailPrice" class="mrpdata form-control" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+            </table>
+        </div>
+        <div class="col-md-5">
+
+            <table id="dataLedgerItemMaster" class="table table-striped table-bordered dt-responsive nowrap " style="font-size:14px" cellspacing="0">
+                <thead>
+                    <tr>
+                        <th>Barcode</th>
+                        <th>Item <br />Name</th>
+                        <th>Category <br />Name   </th>
+                        <th>Purchase <br /> Rate</th>
+                        <th>MRP</th>
+                        <th>Select</th>
+                    </tr>
+                </thead>
+                <thead>
+                    <tr>
+                        <th></th>
+                        <th></th>
+                        <th>
+                            <input type="text" id="CategorySearch" class="form-control" />
+                        </th>
+                        <th></th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                </thead>
+
+                <tbody>
+                    @foreach (var itemMaster in @Model)
+                    {
+                        <tr>
+                            <td>@itemMaster.BarCode</td>
+                            <td>@itemMaster.ItemMasterName</td>
+                            <td>@itemMaster.CategoryName</td>
+                            <td>
+                                <input type="text" class="purchaseRateData form-control" value="@itemMaster.PurchaseRate" />
+                            </td>
+                            <td>
+                                <input type="text" value="@itemMaster.MaximumRetailPrice" class="mrpdata form-control" />
+                            </td>
+                            <td>
+                                <input type="checkbox" class="chkData form-control" id="@itemMaster.ItemMasterId" />
+                            </td>
+                        </tr>
+                    }
+                </tbody>
+                @*<tfoot>
+                        <tr>
+                            <td>
+                                <input id="Submit" class="btn btn-success" value="Save" />
+                            </td>
+                        </tr>
+                    </tfoot>*@
+            </table>
+        </div>
+    </div>
+    <div class="panel-footer">
+
+        <a asp-action="List" asp-route-id="1" accesskey="l" class="btn btn-primary">Show All (Alt+L)</a>
+        <a class="btn btn-primary  pull-right" id="SaveSettings">Save Settings</a>
+    </div>
+</div>
+<link href="https://cdn.datatables.net/1.10.15/css/dataTables.bootstrap.min.css" rel="stylesheet" />
+<link href="https://cdn.datatables.net/responsive/2.1.1/css/responsive.bootstrap.min.css" rel="stylesheet" />
+<script src="https://cdn.datatables.net/1.10.15/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.datatables.net/1.10.15/js/dataTables.bootstrap4.min.js "></script>
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $("#containerDiv").removeClass('container')
+
+        $('#dataItemMasterSettings').DataTable({
+            "scrollY": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
+
+        var table = $('#dataLedgerItemMaster').DataTable({
+            "scrollY": true,
+            "lengthMenu": [[10, 25, 50, -1], [10, 25, 50, "All"]]
+        });
+
+        $('#CategorySearch').keyup(function () {
+
+            table
+                .column(2)
+                .search(this.value)
+                .draw();
+
+        });
+        $('.dataTables_length').addClass('bs-select');
+
+        $("#SaveSettings").click(function () {
+            var parameters = [];
+            var data = table.rows();
+            data.every(function () {
+
+                var rowNode = this.node();
+                $(rowNode).each(function () {
+                    var checked = $(this).find('.chkData').is(':checked');
+                    if (checked) {
+                        var mrp = $(this).find('.mrpdata').val();
+                        var purchaseRate = $(this).find('.purchaseRateData').val();
+
+                        parameters.push({
+                            mrp: mrp,
+                            purchaseRate: purchaseRate
+                        });
+
+                    }
+                });
+            });
+
+            console.log(JSON.stringify(parameters));
+
+            //$('table tr').each(function () {
+            //    var td = $('td', this);
+            //    parameters.push({
+            //        transId: $('input[name="TransID"]', td).val(),
+            //        itemId: $('input[name="ItemID"]', td).val(),
+            //        typeId: $('input[name="TypeID"]', td).val()
+            //    });
+            //});
+
+            //$.ajax({
+            //    url: this.action,
+            //    type: this.method,
+            //    data: JSON.stringify(parameters),
+            //    contentType: 'application/json; charset=utf-8',
+            //    success: function (result) {
+            //        // ...
+            //    },
+            //    error: function (request) {
+            //        // ...
+            //    }
+            //});
+
+        });
+
+    });
+
+        //function SaveItemMasterSettings() {
+
+        //    //var table = $("#dataLedgerItemMaster tbody");
+
+        //    //table.find('tr').each(function (i, el) {
+        //    //    var $tds = $(this).find('td'),
+        //    //        data1 = $tds.eq(0).text(),
+        //    //        data2 = $tds.eq(1).text(),
+        //    //        data3 = $tds.eq(2).text();
+        //    //    console.log(data1, data2, data3);
+        //    //    // do something with productId, product, Quantity
+        //    //});
+
+        //    var data = table.rows();
+        //    data.each(function (value, index) {
+
+        //        console.log($this.parent)
+        //        //console.log(`For index ${index}, data value is ${value}`);
+        //    });
+
+        //    //var parameters = [];
+        //    //// TODO: maybe you want to assign an unique id to your table element
+        //    //$('table tr').each(function () {
+        //    //    var td = $('td', this);
+        //    //    parameters.push({
+        //    //        transId: $('input[name="TransID"]', td).val(),
+        //    //        itemId: $('input[name="ItemID"]', td).val(),
+        //    //        typeId: $('input[name="TypeID"]', td).val()
+        //    //    });
+        //    //});
+
+        //    //$.ajax({
+        //    //    url: this.action,
+        //    //    type: this.method,
+        //    //    data: JSON.stringify(parameters),
+        //    //    contentType: 'application/json; charset=utf-8',
+        //    //    success: function (result) {
+        //    //        // ...
+        //    //    },
+        //    //    error: function (request) {
+        //    //        // ...
+        //    //    }
+        //    //});
+        //}
+</script>
+<style type="text/css">
+</style>

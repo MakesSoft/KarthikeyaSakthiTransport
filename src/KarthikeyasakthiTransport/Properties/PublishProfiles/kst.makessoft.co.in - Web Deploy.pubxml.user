@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+This file is used by the publish/package process of your Web project. You can customize the behavior of this process
+by editing this MSBuild file. In order to learn more about this please visit https://go.microsoft.com/fwlink/?LinkID=208121. 
+-->
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <PropertyGroup>
+    <TimeStampOfAssociatedLegacyPublishXmlFile />
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAA4TkW5jgPWU+XdPOb69uEggAAAAACAAAAAAAQZgAAAAEAACAAAAA0PnPpagzRz7Lu1qqC71F+XrK5K5x3aAxk6p2gn0309AAAAAAOgAAAAAIAACAAAACojMZESaNC0CkKALNjt0PR2TdO+tZzi2X+X1aK5Mg+nSAAAADd0vjR/OMWLaR8R+ob5lIeANYxrcTkVqqg/QkVQbSYaUAAAAB9vjr3yQQ8vWr4XZt+MF7EN1wWnBE/z4zA46HoFRwpqK6T39SUGOzW5fCnFvOQQhWZvUITuaEceBzFcJ67RNyK</EncryptedPassword>
+  </PropertyGroup>
+  <ItemGroup>
+    <DestinationConnectionStrings Include="DatabaseConnection">
+      <Value>SERVER=148.72.232.170%3bPORT=3306%3bUID=kst_user%3bPASSWORD=Makessoft_Transport%3bDATABASE=ph21095460141_kst%3b</Value>
+    </DestinationConnectionStrings>
+  </ItemGroup>
+</Project>

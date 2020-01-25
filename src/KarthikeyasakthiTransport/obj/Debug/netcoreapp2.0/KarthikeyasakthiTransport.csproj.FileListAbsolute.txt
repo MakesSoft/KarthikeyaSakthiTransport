@@ -1,0 +1,11 @@
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.0\KarthikeyasakthiTransport.csproj.CoreCompileInputs.cache
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.0\KarthikeyasakthiTransport.AssemblyInfoInputs.cache
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.0\KarthikeyasakthiTransport.AssemblyInfo.cs
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.0\KarthikeyasakthiTransport.dll
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.0\KarthikeyasakthiTransport.pdb
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\bin\Debug\netcoreapp2.0\KarthikeyasakthiTransport.deps.json
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\bin\Debug\netcoreapp2.0\KarthikeyasakthiTransport.runtimeconfig.json
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\bin\Debug\netcoreapp2.0\KarthikeyasakthiTransport.runtimeconfig.dev.json
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\bin\Debug\netcoreapp2.0\KarthikeyasakthiTransport.dll
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\bin\Debug\netcoreapp2.0\KarthikeyasakthiTransport.pdb
+D:\MyProjects\Makesoft\KarthikeyasakthiTransport\KarthikeyasakthiTransport\obj\Debug\netcoreapp2.0\KarthikeyasakthiTransport.csprojAssemblyReference.cache

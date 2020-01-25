@@ -1,0 +1,48 @@
+﻿@model IEnumerable<SubGroupViewModel>
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="panel panel-primary">
+    <div class="panel-heading">
+        <h3 class="panel-title">SubGroup</h3>
+    </div>
+    <div class="panel-body">
+        <table id="dataTableList" class="table table-striped table-bordered dt-responsive nowrap" width="100%" cellspacing="0">
+            <thead>
+                <tr>
+                    <th>SubGroupID</th>
+                    <th>SubGroupName</th>
+                    <th>GroupName</th>
+                    <th>CreateDate</th>
+                    <th>Edit</th>
+                    <th>Delete</th>
+                </tr>
+            </thead>
+            <tbody>
+                @foreach (var subGroup in Model)
+                {
+                    <tr>
+                        <td>@subGroup.SubGroup.SubGroupId</td>
+                        <td>@subGroup.SubGroup.SubGroupName</td>
+                        <td>@subGroup.GroupName</td>
+                        <td>@subGroup.SubGroup.CreateDate</td>
+                        <td>
+                            <a asp-action="Edit" asp-route-id="@subGroup.SubGroup.SubGroupId" class="btn btn-primary">Edit</a>
+                        </td>
+                        <td>
+                            <form method="post" asp-action="Delete" asp-route-id="@subGroup.SubGroup.SubGroupId">
+                                <button type="submit" class="btn btn-danger" onclick="return confirm('Are you sure want to delete?')">
+                                    Delete
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                }
+            </tbody>
+        </table>
+    </div>
+    @await Component.InvokeAsync("ListFooter")
+</div>
+
+@await Component.InvokeAsync("DataTableScripts")

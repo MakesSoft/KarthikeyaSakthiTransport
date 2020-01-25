@@ -1,0 +1,32 @@
+﻿@model Unit
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+<div class="container">
+    @if (TempData["UnitMessage"] != null)
+    {
+        <p class="alert alert-success" id="successMessage">@TempData["UnitMessage"]</p>
+    }
+
+    <form method="post" enctype="multipart/form-data" asp-controller="Unit" asp-action="Create">
+        <div class="panel panel-primary">
+            <div class="panel-heading">
+                <h3 class="panel-title">Create Unit</h3>
+            </div>
+            <div class="panel-body">
+
+                <div class="col-xs-12">
+                    @Html.AntiForgeryToken()
+                    @Html.ValidationSummary()
+                    <div class="form-group">
+                        <label class="control-label" asp-for="UnitName">Unit Name</label>
+                        <input asp-for="UnitName" autofocus="autofocus" type="text" class="form-control" />
+                        <span asp-validation-for="UnitName" class="text-danger"></span>
+                    </div>
+                </div>
+            </div>
+            @await Component.InvokeAsync("DivElement")
+        </div>
+    </form>
+</div>

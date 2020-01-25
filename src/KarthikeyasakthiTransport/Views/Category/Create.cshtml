@@ -1,0 +1,29 @@
+﻿@model Category
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (TempData["CategoryMessage"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["CategoryMessage"]</p>
+}
+
+<form method="post" enctype="multipart/form-data" asp-controller="Category" asp-action="Create">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Create Category</h3>
+        </div>
+        <div class="panel-body">
+            <div class="col-md-offset-0 col-md-4">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    <label class="control-label" asp-for="CategoryName">Category Name</label>
+                    <input asp-for="CategoryName" autofocus="autofocus" type="text" class="form-control" />
+                    <span asp-validation-for="CategoryName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        @await Component.InvokeAsync("DivElement")
+    </div>
+</form>

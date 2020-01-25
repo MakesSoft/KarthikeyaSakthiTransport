@@ -1,0 +1,72 @@
+﻿@model SubGroupViewModel
+@{
+    Layout = "~/Views/Shared/_AdminLayout.cshtml";
+}
+
+@if (TempData["SubGroupMessage"] != null)
+{
+    <p class="alert alert-success" id="successMessage">@TempData["SubGroupMessage"]</p>
+}
+<form method="post" enctype="multipart/form-data" asp-controller="SubGroup" asp-action="Create">
+    <div class="panel panel-primary">
+        <div class="panel-heading">
+            <h3 class="panel-title">Create Sub Group</h3>
+        </div>
+        <div class="panel-body">
+
+            <div class="col-md-4">
+                @Html.AntiForgeryToken()
+                @Html.ValidationSummary()
+                <div class="form-group">
+                    <label class="control-label" asp-for="SubGroup.SubGroupName">SubGroup Name</label>
+                    <input asp-for="SubGroup.SubGroupName" autofocus="autofocus" type="text" class="form-control" />
+                    <span asp-validation-for="SubGroup.SubGroupName" class="text-danger"></span>
+                </div>
+                <div class="form-group">
+                    <label class="control-label" asp-for="SubGroup.GroupId">Group Name</label>
+                    <input id="groupName" asp-for="GroupName" type="text" class="form-control" />
+                    <input asp-for="SubGroup.GroupId" style="display:none" id="groupId" type="text" class="form-control" />
+                    <span asp-validation-for="GroupName" class="text-danger"></span>
+                </div>
+            </div>
+        </div>
+        @await Component.InvokeAsync("DivElement")
+    </div>
+</form>
+
+<script type="text/javascript">
+
+    $(document).ready(function () {
+        $('#groupName').autocomplete({
+            source: function (request, response) {
+                var autocompleteUrl = '/Group/GetGroups' + '?search=' + request.term;
+                $.ajax({
+                    url: autocompleteUrl,
+                    type: 'GET',
+                    cache: false,
+                    dataType: 'json',
+                    success: function (json) {
+                        var groupData = JSON.stringify(json.responseText);
+                        var parse = JSON.parse(groupData);
+                        response($.map(parse, function (data) {
+                            return {
+                                label: data.value,
+                                value: data.value,
+                                id: data.id
+                            };
+                        }));
+                    },
+                    error: function (textStatus, errorThrown) {
+                        console.log('some error occured', textStatus, errorThrown);
+                    }
+                });
+            },
+            minLength: 1,
+            select: function (event, ui) {
+                $('#groupName').val(ui.item.value);
+                $('#groupId').val(ui.item.id);
+                return false;
+            }
+        });
+    });
+</script>

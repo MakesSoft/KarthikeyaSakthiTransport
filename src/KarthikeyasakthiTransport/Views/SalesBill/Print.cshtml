@@ -1,0 +1,656 @@
+﻿@model SalesBillPrintViewModel
+@{
+    Layout = "~/Views/Shared/_Layout.cshtml";
+}
+
+<style>
+    body {
+        padding-top: 0px;
+    }
+
+    .mainDiv {
+        border: 2px solid black;
+        margin: auto;
+        width: 100%
+    }
+
+    .border {
+        height: auto;
+        border: 2px solid black;
+        margin: auto;
+        margin: 2px auto;
+        border-radius: 30px;
+    }
+
+    .table-bordered {
+        border: 1px solid black !important;
+    }
+
+        .table-bordered > thead > tr > th,
+        .table-bordered > tbody > tr > th,
+        .table-bordered > tfoot > tr > th,
+        .table-bordered > thead > tr > td,
+        .table-bordered > tbody > tr > td,
+        .table-bordered > tfoot > tr > td {
+            border: 1px solid black !important;
+        }
+
+    #salesItemsBody tr td:nth-child(4), #salesItemsBody tr td:nth-child(5), #salesItemsBody tr td:nth-child(6) {
+        text-align: right;
+    }
+
+    .tdheight td {
+        padding: 2px !important;
+    }
+
+    .table {
+        margin-bottom: 0px !important;
+    }
+
+    .form-group {
+        margin: 0px !important;
+    }
+</style>
+
+<div id="PrintDiv">
+    @{string lastItem = @Model.PrintOptions != null ? Model.PrintOptions.Last() : string.Empty; }
+
+    @if (lastItem != string.Empty)
+    {
+        @foreach (var printOption in Model.PrintOptions)
+        {
+            <div class="mainDiv">
+                <div class="border">
+                    <div class="row" style="margin:10px">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    GST NO: 33BITPV2373M1ZF
+                                    <br />
+                                    Pan No: BITPV2373M
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-6">
+                            <div class="form-group" style="text-align:center">
+                                <label class="control-label" style="font-size:30px;font-style:italic;">
+                                    KarthikeyaSakthi Transport
+                                </label>
+                                <label class="control-label">
+                                    No. 4/2, Manoranjitham Street, Sree Ram Nagar, Sammatipuram, Madurai - 16
+                                    <br />Email: transportkarthikeyasakthi@gmail.com
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-3" style="text-align:right">
+                            <div class="form-group">
+                                <label class="control-label">
+                                    Ph: 0452 - 4392553
+                                    <br />
+                                    Mob: 93445 66770
+                                    <br />78452 66770
+                                    <br />98430 16490
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="row">
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label class="control-label" style="font-size:18px">
+                                    Invoice No: @Model.SalesBillViewModel.SalesBillId
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label class="control-label" style="font-size:16px">
+                                    Lorry No: @Model.SalesBillViewModel.LorryNo
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group">
+                                <label class="control-label" style="font-size:14px">
+                                    EWay No: @*@Model.SalesBillViewModel.EWayBillNo*@ 123456789012345
+                                </label>
+                            </div>
+                        </div>
+                        <div class="col-xs-3">
+                            <div class="form-group" style="text-align:right;font-size:18px">
+                                <label class="control-label">
+                                    Date: @Model.SalesBillViewModel.SalesBillDate.Value.ToString("dd/MM/yyyy")
+                                </label>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <table id="dataTableList" class="table table-striped table-bordered dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th style="width:50%;text-align:center">
+                                <label class="control-label" style="font-size:18px">
+                                    Consignor Details
+                                </label>
+                            </th>
+                            <th style="width:50%;text-align:center">
+                                <label class="control-label" style="font-size:18px">
+                                    Consignee Details
+                                </label>
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>
+                                <label>Name      : @Model.SalesBillViewModel.ConsignorName</label>
+                                <br />   <label>Address      : @Model.SalesBillViewModel.ConsignorAddress</label>
+                                <br />  <label>GST      : @Model.SalesBillViewModel.ConsignorGst</label>
+                                <br />   <label>Phone      : @Model.SalesBillViewModel.ConsignorPhone</label>
+                            </td>
+                            <td>
+                                <label>Name      : @Model.SalesBillViewModel.ConsigneeName</label>
+                                <br />  <label>Address      : @Model.SalesBillViewModel.ConsigneeAddress</label>
+                                <br />   <label>GST      : @Model.SalesBillViewModel.ConsigneeGst</label>
+                                <br />   <label>Phone      : @Model.SalesBillViewModel.ConsigneePhone</label>
+                            </td>
+                        </tr>
+                        <tr>
+                            <td colspan="2">
+                                <label>Delivery At: @Model.SalesBillViewModel.DeliveryAt</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+
+                <table id="dataTableList" class="table table-striped table-bordered dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th style="text-align:center;width:8%">S.No</th>
+                            <th style="text-align:center;width:7%">Qty</th>
+                            <th style="text-align:center;width:45%">Description of Goods</th>
+                            <th style="text-align:center;width:10%">Weight</th>
+                            <th style="text-align:center;width:20%"></th>
+                            <th style="text-align:center;width:10%">Amount</th>
+                        </tr>
+                    </thead>
+                    <tbody id="salesItemsBody">
+
+                        @foreach (var billItems in Model.SalesItemBillViewModel)
+                        {
+                            <tr class="tdheight">
+                                <td style="text-align:center">@billItems.SalesBillItemsId</td>
+                                <td style="text-align:center">@billItems.Qty</td>
+                                <td>
+                                    @billItems.ItemMasterName
+                                    <br />
+                                    @billItems.Description
+                                </td>
+                                <td>
+                                    @billItems.Weight
+                                </td>
+                                <td></td>
+                                <td> @billItems.Amount</td>
+                            </tr>
+                        }
+
+                        @for (int i = Model.SalesItemBillViewModel.Count(); i < 5; i++)
+                        {
+                            <tr class="tdheight" style="height:25px">
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                                <td></td>
+                            </tr>
+                        }
+
+                        <tr class="tdheight">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                Delivery Charge:
+                            </td>
+                            <td>
+                                <label>@Model.SalesBillViewModel.DoorDeliveryCharge</label>
+                            </td>
+                        </tr>
+                        <tr class="tdheight">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                Gst Amount:
+                            </td>
+                            <td>
+                                <label>@Model.SalesBillViewModel.GstAmount</label>
+                            </td>
+                        </tr>
+                        <tr class="tdheight">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                Loading Expense:
+                            </td>
+                            <td>
+                                <label>@Model.SalesBillViewModel.LoadingExpenses</label>
+                            </td>
+                        </tr>
+                        <tr class="tdheight">
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td></td>
+                            <td>
+                                Advance:
+                            </td>
+                            <td>
+                                <label>@Model.SalesBillViewModel.AdvanceAmount</label>
+                            </td>
+                        </tr>
+                        <tr class="tdheight">
+                            <td colspan="2">GST Payable By </td>
+
+                            <td></td>
+                            <td></td>
+                            <td style="text-align:right">
+                                Round off:
+                            </td>
+                            <td>
+                                <label>@Model.SalesBillViewModel.RoundOff</label>
+                            </td>
+                        </tr>
+                        <tr class="tdheight">
+                            <td colspan="3">@printOption</td>
+
+                            <td></td>
+                            <td style="text-align:right">
+                                <label class="control-label">     Total: </label>
+                            </td>
+                            <td style="text-align:right">
+                                <label>@Model.SalesBillViewModel.TotalAmount</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+                <table id="dataTableList" class="table table-striped table-bordered dt-responsive nowrap">
+                    <thead>
+                        <tr>
+                            <th style="width:40%">
+                                <label>Value Rs: @Model.SalesBillViewModel.Value</label>
+                            </th>
+                            <th style="width:20%;text-align:center">
+                                @Model.SalesBillViewModel.BillType
+                            </th>
+                            <th style="text-align:right">
+                                For Karthikeya Sakthi Transport
+                            </th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td colspan="3">
+                                <label>Inwords: @Model.SalesBillViewModel.ValueInText</label>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+            if (lastItem != printOption)
+            {
+                <div style="page-break-after: always;"></div>
+            }
+        }
+    }
+
+    @if (Model.DispatchPrint)
+    {
+        <style>
+            body {
+                padding-top: 0px;
+                margin: 0px;
+            }
+
+            .mainDivDispatchPrint {
+                margin: auto;
+                width: 100%
+            }
+
+            .borderDispatchPrint {
+                height: auto;
+                border-bottom: 4px solid black;
+                margin: auto;
+                margin: 2px auto;
+            }
+
+            .form-group {
+                margin: 0px !important;
+            }
+
+            .row {
+                padding: 4px !important;
+            }
+        </style>
+        <link href="https://fonts.googleapis.com/css?family=Parisienne&display=swap" rel="stylesheet">
+        @if (lastItem != string.Empty)
+        {
+            <div style="page-break-after: always;"></div>
+        }
+        <div class="mainDivDispatchPrint">
+            <div class="borderDispatchPrint">
+                <div class="row" style="margin:10px;max-height:70px">
+                    <div class="col-xs-4">
+                        <div class="form-group">
+                            <label class="control-label">
+                                GST NO: 33BITPV2373M1ZF
+                                <br />
+                                Pan No: BITPV2373M
+                            </label>
+                        </div>
+                    </div>
+                    <div class="col-xs-3">
+                        <div class="form-group" style="text-align:right;">
+                            <img src="~/lib/images/ks.png" width="80" height="80" />
+                        </div>
+                    </div>
+                    <div class="col-xs-5" style="text-align:right">
+                        <div class="form-group">
+                            <label class="control-label">
+                                Ph: 0452 - 4392553
+                                <br />
+                                Mob: 93445 66770
+                                <br />78452 66770
+                                <br />98439 16490
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div class="row" style="margin:5px">
+                    <div class="col-xs-3">
+                        <div class="form-group" style="text-align:left">
+                            <img src="~/lib/images/alagar.jpg" width="120" height="120" style="border-radius:25px" />
+                        </div>
+                    </div>
+                    <div class="col-xs-9">
+                        <div class="form-group" style="text-align:center">
+                            <label class="control-label" style="font-size:40px;font-style:italic;font-family: 'Parisienne', cursive;">
+                                Karthikeyasakthi Transport
+                            </label>
+                            <label class="control-label" style="font-size:16px">
+                                No. 4/2, Manoranjitham Street, Sree Ram Nagar, Sammatipuram, Madurai - 16
+                                <br />Email: transportkarthikeyasakthi@gmail.com
+                            </label>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <br />
+            <div class="row">
+                <div class="col-xs-2">
+                    <div class="form-group" style="text-align:left">
+                        <label class="control-label" style="font-size:18px">
+                            To
+                        </label>
+                    </div>
+                </div>
+                <div class="col-xs-10">
+                    <div class="form-group" style="float:right">
+                        <label class="control-label" style="font-size:18px;">
+                            Date: @DateTime.Now.ToString("dd/MM/yyyy")
+                        </label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="text-align:left">
+                        <label>@Model.SalesBillViewModel.ConsignorName</label>
+                        <br />   <label>@Model.SalesBillViewModel.ConsignorAddress</label>
+                        <br />   <label> @Model.SalesBillViewModel.ConsignorPhone</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="text-align:left">
+                        <label>Sub : Lorry Freight Details - Reg.</label>
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="text-align:left">
+                        Dear Sir,
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="text-align:left">
+                        I herewith quoted the Lorry price details.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="form-group" style="text-align:left">
+                        <label>Dispatch Date</label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    :
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group" style="text-align:left">
+                        @Model.SalesBillViewModel.SalesBillDate.Value.ToString("dd/MM/yyyy")
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="form-group" style="text-align:left">
+                        <label>Invoice No.</label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    :
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group" style="text-align:left">
+                        @Model.SalesBillViewModel.InvoiceNo
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="form-group" style="text-align:left">
+                        <label>LR Nos</label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    :
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group" style="text-align:left">
+                        @Model.SalesBillViewModel.LRNo
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="form-group" style="text-align:left">
+                        <label>Lorry No.</label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    :
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group" style="text-align:left">
+                        @Model.SalesBillViewModel.LorryNo
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="form-group" style="text-align:left">
+                        <label>Description of Goods</label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    :
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group" style="text-align:left">
+                        @Model.SalesBillViewModel.LorryNo
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="form-group" style="text-align:left">
+                        <label>No of Packages</label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    :
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group" style="text-align:left">
+                        @Model.SalesBillViewModel.LorryNo
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="form-group" style="text-align:left">
+                        <label>Lorry Freight (Rs)</label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    :
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group" style="text-align:left">
+                        @Model.SalesBillViewModel.TotalAmount
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-5">
+                    <div class="form-group" style="text-align:left">
+                        <label>Total</label>
+                    </div>
+                </div>
+                <div class="col-xs-1">
+                    :
+                </div>
+                <div class="col-xs-6">
+                    <div class="form-group" style="text-align:left">
+                        @Model.SalesBillViewModel.TotalAmount
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="text-align:left">
+                        (Rupees in Words: @Model.SalesBillViewModel.ValueInText)
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="text-align:left">
+                        <span style="font-size:15px; text-decoration:underline;font-weight:bold;">Note:</span>
+                        <br />
+                        Lorry Freight Charges should be paid only through RTGS / Cheque.
+                    </div>
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="text-align:left">
+                        <span style="font-size:16px; text-decoration:underline;font-weight:bold;">BANK DETAILS : </span>
+                    </div>
+                </div>
+            </div>
+            <div class="row" style="padding:0px 0px 0px 8px !important">
+                <div class="col-xs-3">
+                    <div class="form-group" style="text-align:left">
+                        Account Name
+                    </div>
+                </div>
+                <div class="col-xs-9">
+                    : &nbsp; <label style="margin-bottom:0px;"> KARTHIKEYASAKTHI TRANSPORT</label>
+                </div>
+            </div>
+            <div class="row" style="padding:0px 0px 0px 8px !important">
+                <div class="col-xs-3">
+                    <div class="form-group" style="text-align:left">
+                        Account No
+                    </div>
+                </div>
+                <div class="col-xs-9">
+                    : &nbsp; 1160115000015512
+                </div>
+            </div>
+            <div class="row" style="padding:0px 0px 0px 8px !important">
+                <div class="col-xs-3">
+                    <div class="form-group" style="text-align:left">
+                        Bank
+                    </div>
+                </div>
+                <div class="col-xs-9">
+                    : &nbsp; KARUR VYSYA BANK
+                </div>
+            </div>
+
+            <div class="row" style="padding:0px 0px 0px 8px !important">
+                <div class="col-xs-3">
+                    <div class="form-group" style="text-align:left">
+                        Branch
+                    </div>
+                </div>
+                <div class="col-xs-9">
+                    : &nbsp;  GNANAOLIVUPURAM, MADURAI
+                </div>
+            </div>
+            <div class="row" style="padding:0px 0px 0px 8px !important">
+                <div class="col-xs-3">
+                    <div class="form-group" style="text-align:left">
+                        IFSC Code
+                    </div>
+                </div>
+                <div class="col-xs-9">
+                    : &nbsp;  KVBL0001160
+                </div>
+            </div>
+            <div class="row">
+                <div class="col-xs-12">
+                    <div class="form-group" style="text-align:right">
+                        For
+                        <label class="control-label" style="font-size:20px;font-style:italic;font-family: 'Parisienne', cursive;">
+                            Karthikeyasakthi Transport
+                        </label>
+                    </div>
+                </div>
+            </div>
+        </div>
+    }
+</div>
+@*<button onclick="generate()">Generate PDF</button>*@
+@*<script src='~/js/jspdf.min.js'></script>*@
+<script>
+
+    $(document).ready(function () {
+        window.print();
+    });
+</script>
